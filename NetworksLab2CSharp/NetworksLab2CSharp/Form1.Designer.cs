@@ -35,7 +35,7 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(32, 93);
+            this.startButton.Location = new System.Drawing.Point(2, 0);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 0;
@@ -46,14 +46,14 @@
             // startLabel
             // 
             this.startLabel.AutoSize = true;
-            this.startLabel.Location = new System.Drawing.Point(32, 123);
+            this.startLabel.Location = new System.Drawing.Point(12, 26);
             this.startLabel.Name = "startLabel";
             this.startLabel.Size = new System.Drawing.Size(0, 13);
             this.startLabel.TabIndex = 1;
             // 
             // finishButton
             // 
-            this.finishButton.Location = new System.Drawing.Point(160, 93);
+            this.finishButton.Location = new System.Drawing.Point(83, 0);
             this.finishButton.Name = "finishButton";
             this.finishButton.Size = new System.Drawing.Size(75, 23);
             this.finishButton.TabIndex = 2;
@@ -70,7 +70,7 @@
             this.Controls.Add(this.startLabel);
             this.Controls.Add(this.startButton);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Tcp Client Lab 2";
             this.ResumeLayout(false);
             this.PerformLayout();
 

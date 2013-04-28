@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace NetworksLab2CSharp
 {
@@ -14,6 +16,34 @@ namespace NetworksLab2CSharp
         /// </summary>
         public ConnectClass()
         {
+        }
+
+        /// <summary>
+        /// Creates a socket and connects to server
+        /// then spawns threads and sends them to
+        /// receiver and sender classes.
+        /// </summary>
+        public string ConnectToServer()
+        {
+            // Declare variables
+            /*
+             * The internal name of the server is 
+             * “Coco” and is located at the private 
+             * IP address of 192.168.101.210, 
+             * and you are to use service port 2605
+             */
+            Socket sock = new Socket(SocketType.Stream, ProtocolType.IPv4);
+            IPAddress ipAddr = new IPAddress(192168101210);
+            try
+            {
+                sock.Connect(ipAddr, 2605);
+            }
+            catch (ArgumentNullException ane)
+            {
+                return ane.Message;
+            }
+
+            return "Ran through ConnectToServer function";
         }
 
         /// <summary>
