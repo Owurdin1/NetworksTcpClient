@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -20,10 +21,11 @@ namespace NetworksLab2CSharp
 
         /// <summary>
         /// Creates a socket and connects to server
-        /// then spawns threads and sends them to
-        /// receiver and sender classes.
         /// </summary>
-        public string ConnectToServer()
+        /// <returns>
+        /// Socket that is connected to server
+        /// </returns>
+        public Socket ConnectToServer()
         {
             // Declare variables
             /*
@@ -32,18 +34,65 @@ namespace NetworksLab2CSharp
              * IP address of 192.168.101.210, 
              * and you are to use service port 2605
              */
+
             Socket sock = new Socket(SocketType.Stream, ProtocolType.IPv4);
+            
+            // IPAddress class set to long int ip to connect to
             IPAddress ipAddr = new IPAddress(192168101210);
+
+            // Try to connect the socket to server:
             try
             {
                 sock.Connect(ipAddr, 2605);
             }
             catch (ArgumentNullException ane)
             {
-                return ane.Message;
+                System.Windows.Forms.MessageBox.Show(ane.Message);
+            }
+            catch (SocketException se)
+            {
+                System.Windows.Forms.MessageBox.Show(se.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                System.Windows.Forms.MessageBox.Show(ae.Message);
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
             }
 
-            return "Ran through ConnectToServer function";
+            return sock;
+        }
+
+        /// <summary>
+        /// Thread start function to create an instance of the
+        /// ReceiverClass and begin listening on the socket for
+        /// information from the server.
+        /// </summary>
+        /// <param name="data">
+        /// Takes an Object, in this case it will
+        /// be a Socket.
+        /// </param>
+        private static void ReceiverThreadStart(object data)
+        {
+            Socket sock = (Socket)data;
+            ReceiverClass rClass = new ReceiverClass();
+            string threadWork = rClass.ReceiverCreated();
+        }
+
+        /// <summary>
+        /// Thread start function to create an instance of
+        /// the SenderClass and begin any send operations on
+        /// the socket for information to be sent to server
+        /// </summary>
+        /// <param name="data">
+        /// Takes an Object, in this case it will
+        /// be a Socket.
+        /// </param>
+        private static void SenderThreadStart(object data)
+        {
+
         }
 
         /// <summary>
@@ -59,23 +108,17 @@ namespace NetworksLab2CSharp
         }
 
         /// <summary>
-        /// Creates sockets and begins connection process
-        /// </summary>
-        public void CreateSockets()
-        {
-
-        }
-
-        /// <summary>
         /// Begins building connection to server
         /// </summary>
         /// <param name="inputSock">
         /// Takes a socket that will be 
         /// used to read/write to from server
         /// </param>
-        private void BeginConnection(Socket inputSock)
+        public void ThreadBuilder(Socket inputSock)
         {
-
+            // Create threads and send them off to do their thing
+            Thread receiverThread = new Thread(ConnectClass.ReceiverThreadStart);
+            Thread senderThread = new Thread(ConnectClass.SenderThreadStart);
         }
     }
 
@@ -87,6 +130,8 @@ namespace NetworksLab2CSharp
         public ReceiverClass()
         {
         }
+
+
 
         /// <summary>
         /// Test function to ensure class has been created.
