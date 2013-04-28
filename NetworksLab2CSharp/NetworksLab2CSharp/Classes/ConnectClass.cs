@@ -34,35 +34,49 @@ namespace NetworksLab2CSharp
              * IP address of 192.168.101.210, 
              * and you are to use service port 2605
              */
+            Socket sock;
 
-            Socket sock = new Socket(SocketType.Stream, ProtocolType.IPv4);
-            
             // IPAddress class set to long int ip to connect to
-            IPAddress ipAddr = new IPAddress(192168101210);
+            byte[] ip = new byte[4];
+            ip[0] = 192;
+            ip[1] = 168;
+            ip[2] = 101;
+            ip[3] = 210;
+            IPAddress ipAddr = new IPAddress(ip);
 
-            // Try to connect the socket to server:
             try
             {
-                sock.Connect(ipAddr, 2605);
-            }
-            catch (ArgumentNullException ane)
-            {
-                System.Windows.Forms.MessageBox.Show(ane.Message);
+                sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //sock.
+                // Try to connect the socket to server:
+                try
+                {
+                    sock.Connect(ipAddr, 2605);
+                    return sock;
+                }
+                catch (ArgumentNullException ane)
+                {
+                    System.Windows.Forms.MessageBox.Show("ArgNullException" + ane.Message);
+                }
+                catch (SocketException se)
+                {
+                    System.Windows.Forms.MessageBox.Show("SocketException" + se.Message);
+                }
+                catch (ArgumentException ae)
+                {
+                    System.Windows.Forms.MessageBox.Show("ArgException" + ae.Message);
+                }
+                catch (Exception e)
+                {
+                    System.Windows.Forms.MessageBox.Show("Exception e" + e.Message);
+                }
             }
             catch (SocketException se)
             {
-                System.Windows.Forms.MessageBox.Show(se.Message);
+                System.Windows.Forms.MessageBox.Show("SocketException last" + se.Message);
             }
-            catch (ArgumentException ae)
-            {
-                System.Windows.Forms.MessageBox.Show(ae.Message);
-            }
-            catch (Exception e)
-            {
-                System.Windows.Forms.MessageBox.Show(e.Message);
-            }
-
-            return sock;
+            
+            return null;
         }
 
         /// <summary>
@@ -78,7 +92,10 @@ namespace NetworksLab2CSharp
         {
             Socket sock = (Socket)data;
             ReceiverClass rClass = new ReceiverClass();
-            string threadWork = rClass.ReceiverCreated();
+            rClass.ReceiveFunction(sock);
+
+            //string threadWork = rClass.ReceiverCreated();
+            //System.Windows.Forms.MessageBox.Show("Thread running for receiver! " + threadWork);
         }
 
         /// <summary>
@@ -92,7 +109,13 @@ namespace NetworksLab2CSharp
         /// </param>
         private static void SenderThreadStart(object data)
         {
+            Socket sock = (Socket)data;
+            SenderClass sClass = new SenderClass();
+            sClass.SendData(sock);
 
+
+            //string threadWork = sClass.SenderCreated();
+            //System.Windows.Forms.MessageBox.Show("Thread running for sender! " + threadWork);
         }
 
         /// <summary>
@@ -118,7 +141,10 @@ namespace NetworksLab2CSharp
         {
             // Create threads and send them off to do their thing
             Thread receiverThread = new Thread(ConnectClass.ReceiverThreadStart);
+            receiverThread.Start(inputSock);
+
             Thread senderThread = new Thread(ConnectClass.SenderThreadStart);
+            senderThread.Start(inputSock);
         }
     }
 
@@ -131,7 +157,21 @@ namespace NetworksLab2CSharp
         {
         }
 
-
+        /// <summary>
+        /// Listen function begins listening for data on the socket.
+        /// </summary>
+        /// <param name="sock">
+        /// Takes the socket that is connected to the server
+        /// </param>
+        /// <returns>
+        /// a string containing data.
+        /// </returns>
+        public void ReceiveFunction(Socket sock)
+        {
+            int bytesReceived;
+            byte[] receivedBuffer = new byte[1024];
+            bytesReceived = sock.Receive(receivedBuffer);
+        }
 
         /// <summary>
         /// Test function to ensure class has been created.
@@ -153,6 +193,15 @@ namespace NetworksLab2CSharp
         /// </summary>
         public SenderClass()
         {
+        }
+
+        /// <summary>
+        /// Sends data through the connected socket.
+        /// </summary>
+        /// <param name="sock"></param>
+        public void SendData(Socket sock)
+        {
+            //System.Windows.Forms.MessageBox.Show("Sending data sooner or later!");
         }
 
         /// <summary>

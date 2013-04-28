@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Sockets;
 
 namespace NetworksLab2CSharp
 {
@@ -20,23 +21,28 @@ namespace NetworksLab2CSharp
         private void startButton_Click(object sender, EventArgs e)
         {
             ConnectClass cClass = new ConnectClass();
-            string hope = cClass.ConnectCreated();
 
-            //ReceiverClass rClass = new ReceiverClass();
-            //string hope = rClass.ReceiverCreated();
+            string test = cClass.ConnectCreated();
+            startLabel.Text = test;
 
-            //SenderClass sClass = new SenderClass();
-            //string hope = sClass.SenderCreated();
-
-            //LogBuilder lClass = new LogBuilder();
-            //string hope = lClass.LogBuilderCreated();
-
-            startLabel.Text = hope;
+            Socket sock = null;
+            sock = cClass.ConnectToServer();
+            cClass.ThreadBuilder(sock);
         }
 
         private void finishButton_Click(object sender, EventArgs e)
         {
             startLabel.Text = "";
         }
+
+        //private unsafe void endianButton_Click(object sender, EventArgs e)
+        //{
+        //    int a = 0x12345678;
+        //    char *c = (char*)(&a);
+        //    if (*c == 0x78)
+        //        startLabel.Text = "little-endian\n";
+        //    else
+        //        startLabel.Text = "big-endian\n";
+        //}
     }
 }
