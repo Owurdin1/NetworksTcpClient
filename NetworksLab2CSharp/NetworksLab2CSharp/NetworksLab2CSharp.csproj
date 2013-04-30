@@ -80,6 +80,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="IOFiles\ReceivedFile.txt" />
+    <Content Include="IOFiles\Request.txt" />
     <Content Include="Logs\Lab2.Scenario1.WurdingerO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace NetworksLab2CSharp
 {
@@ -188,6 +189,8 @@ namespace NetworksLab2CSharp
 
     class SenderClass
     {
+        const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
+
         /// <summary>
         /// Default constructor for SenderClass
         /// </summary>
@@ -196,12 +199,21 @@ namespace NetworksLab2CSharp
         }
 
         /// <summary>
-        /// Sends data through the connected socket.
+        /// Sends data through the connected socket, pulled
+        /// from the IOFiles/Request.txt file. Converted to bytes.
         /// </summary>
         /// <param name="sock"></param>
         public void SendData(Socket sock)
         {
-            //System.Windows.Forms.MessageBox.Show("Sending data sooner or later!");
+            FileStream f = new FileStream(PATH, FileMode.Open);
+            StreamReader sr = new StreamReader(f);
+
+            //========================================================================================
+            string line = sr.ReadLine();
+            System.Windows.Forms.MessageBox.Show("Line read from file: " + line);
+            //========================================================================================
+            sr.Close();
+            f.Close();
         }
 
         /// <summary>
