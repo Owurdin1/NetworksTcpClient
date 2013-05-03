@@ -191,11 +191,19 @@ namespace NetworksLab2CSharp
     {
         const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
 
+        private Classes.RequestBuilder requestBuilder;
+
         /// <summary>
         /// Default constructor for SenderClass
         /// </summary>
         public SenderClass()
         {
+            requestBuilder = new Classes.RequestBuilder();
+        }
+
+        public SenderClass(Classes.RequestBuilder rb)
+        {
+            requestBuilder = rb;
         }
 
         /// <summary>
@@ -231,11 +239,40 @@ namespace NetworksLab2CSharp
 
     class LogBuilder
     {
+        // Private Global Variables
+        private Classes.ResponseClass responseClass;
+
+        /// <summary>
+        /// Response Class property
+        /// </summary>
+        public Classes.ResponseClass ResponseClass
+        {
+            get
+            {
+                return responseClass;
+            }
+            set
+            {
+                responseClass = value;
+            }
+        }
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public LogBuilder()
         {
+        }
+
+        /// <summary>
+        /// non-default constructor
+        /// Takes a ResponseClass object to
+        /// be parsed for creating logs
+        /// </summary>
+        /// <param name="rc"></param>
+        public LogBuilder(Classes.ResponseClass rc)
+        {
+            responseClass = rc;
         }
 
         /// <summary>
