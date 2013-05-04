@@ -31,11 +31,13 @@
             this.startButton = new System.Windows.Forms.Button();
             this.startLabel = new System.Windows.Forms.Label();
             this.finishButton = new System.Windows.Forms.Button();
+            this.scenarioListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(2, 0);
+            this.startButton.Enabled = false;
+            this.startButton.Location = new System.Drawing.Point(30, 0);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 0;
@@ -46,14 +48,14 @@
             // startLabel
             // 
             this.startLabel.AutoSize = true;
-            this.startLabel.Location = new System.Drawing.Point(12, 26);
+            this.startLabel.Location = new System.Drawing.Point(12, 50);
             this.startLabel.Name = "startLabel";
             this.startLabel.Size = new System.Drawing.Size(0, 13);
             this.startLabel.TabIndex = 1;
             // 
             // finishButton
             // 
-            this.finishButton.Location = new System.Drawing.Point(83, 0);
+            this.finishButton.Location = new System.Drawing.Point(111, 0);
             this.finishButton.Name = "finishButton";
             this.finishButton.Size = new System.Drawing.Size(75, 23);
             this.finishButton.TabIndex = 2;
@@ -61,11 +63,25 @@
             this.finishButton.UseVisualStyleBackColor = true;
             this.finishButton.Click += new System.EventHandler(this.finishButton_Click);
             // 
+            // scenarioListBox
+            // 
+            this.scenarioListBox.FormattingEnabled = true;
+            this.scenarioListBox.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3"});
+            this.scenarioListBox.Location = new System.Drawing.Point(1, 0);
+            this.scenarioListBox.Name = "scenarioListBox";
+            this.scenarioListBox.Size = new System.Drawing.Size(23, 43);
+            this.scenarioListBox.TabIndex = 4;
+            this.scenarioListBox.SelectedIndexChanged += new System.EventHandler(this.scenarioListBox_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(291, 262);
+            this.Controls.Add(this.scenarioListBox);
             this.Controls.Add(this.finishButton);
             this.Controls.Add(this.startLabel);
             this.Controls.Add(this.startButton);
@@ -81,6 +97,7 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label startLabel;
         private System.Windows.Forms.Button finishButton;
+        private System.Windows.Forms.ListBox scenarioListBox;
     }
 }
 

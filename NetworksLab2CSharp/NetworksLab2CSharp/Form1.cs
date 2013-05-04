@@ -25,14 +25,30 @@ namespace NetworksLab2CSharp
             string test = cClass.ConnectCreated();
             startLabel.Text = test;
 
+            // Set scenario Number for ConnectClass
+            cClass.ScenarioNo = Convert.ToInt32(scenarioListBox.SelectedItem);
+
+            // Create Socket and ask ConnectClass to connect
             Socket sock = null;
             sock = cClass.ConnectToServer();
+
+            // Call the thread building funciton to begin send/receive
             cClass.ThreadBuilder(sock);
-        }
+         }
 
         private void finishButton_Click(object sender, EventArgs e)
         {
             startLabel.Text = "";
+            startButton.Enabled = false;
+            scenarioListBox.ClearSelected();
+        }
+
+        private void scenarioListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (scenarioListBox.SelectedIndex != -1)
+            {
+                startButton.Enabled = true;
+            }
         }
 
         //private unsafe void endianButton_Click(object sender, EventArgs e)

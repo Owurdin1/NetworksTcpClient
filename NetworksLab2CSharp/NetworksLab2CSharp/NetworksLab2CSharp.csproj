@@ -85,6 +85,8 @@
     <Content Include="IOFiles\ReceivedFile.txt" />
     <Content Include="IOFiles\Request.txt" />
     <Content Include="Logs\Lab2.Scenario1.WurdingerO.txt" />
+    <Content Include="Logs\Lab2.Scenario2.WurdingerO.txt" />
+    <Content Include="Logs\Lab2.Scenario3.WurdingerO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

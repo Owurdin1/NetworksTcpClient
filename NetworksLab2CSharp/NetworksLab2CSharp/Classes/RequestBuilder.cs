@@ -41,15 +41,16 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                try
-                {
-                    int convertValue = Convert.ToInt32(value);
-                    tcpHeader = Convert.ToString(convertValue, BASE);
-                }
-                catch (Exception e)
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: " + e.Message);
-                }
+                tcpHeader = value;
+                //try
+                //{
+                //    int convertValue = Convert.ToInt32(value);
+                //    tcpHeader = Convert.ToString(convertValue, BASE);
+                //}
+                //catch (Exception e)
+                //{
+                //    System.Windows.Forms.MessageBox.Show("Error: " + e.Message);
+                //}
             }
         }
 
