@@ -15,18 +15,18 @@ namespace NetworksLab2CSharp.Classes
 
         // Private global variables
         private string tcpHeader;
-        private char[] msTimeStamp = new char[10];
+        private string msTimeStamp;
         private string requestID;
         private string studentName;
         private string studentID;
-        private int[] responseDelay = new int[5];
+        private string responseDelay;
         private string clientIPAddress;
-        private int[] clientServicePort = new int[5];
-        private int[] clientSocketNumber = new int[5];
+        private string clientServicePort;
+        private string clientSocketNumber;
         private string foreignHostIPAddress;
-        private int[] foreignHostServicePort = new int[5];
+        private string foreignHostServicePort;
         private string studentData;
-        private int scenarioNo;
+        private string scenarioNo;
 
         // Properties for private variables
         /// <summary>
@@ -68,7 +68,7 @@ namespace NetworksLab2CSharp.Classes
         /// <summary>
         /// msTimeStamp  property, char[]
         /// </summary>
-        public char[] MSTimeStamp
+        public string MSTimeStamp
         {
             get
             {
@@ -76,7 +76,7 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                value.CopyTo(msTimeStamp, 0);
+                msTimeStamp = value;
             }
         }
 
@@ -131,7 +131,7 @@ namespace NetworksLab2CSharp.Classes
         /// Response Delay property.
         /// ASCII Numeric (Int)
         /// </summary>
-        public int[] ResponseDelay
+        public string ResponseDelay
         {
             get
             {
@@ -139,7 +139,8 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                value.CopyTo(responseDelay, 0);
+                responseDelay = value;
+                //value.CopyTo(responseDelay, 0);
             }
         }
 
@@ -163,7 +164,7 @@ namespace NetworksLab2CSharp.Classes
         /// Client Service Port Property.
         /// Default IPConfig port value
         /// </summary>
-        public int[] ClientServicePort
+        public string ClientServicePort
         {
             get
             {
@@ -171,7 +172,8 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                value.CopyTo(clientServicePort, 0);
+                clientServicePort = value;  
+                //value.CopyTo(clientServicePort, 0);
             }
         }
 
@@ -179,7 +181,7 @@ namespace NetworksLab2CSharp.Classes
         /// Client Socket Number Property.
         /// Default Integer array IPConfig
         /// </summary>
-        public int[] ClientSocketNumber
+        public string ClientSocketNumber
         {
             get
             {
@@ -187,7 +189,8 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                value.CopyTo(clientSocketNumber, 0);
+                clientSocketNumber = value;
+                //value.CopyTo(clientSocketNumber, 0);
             }
         }
 
@@ -210,7 +213,7 @@ namespace NetworksLab2CSharp.Classes
         /// <summary>
         /// Foreign Host Service Port
         /// </summary>
-        public int[] ForeignHostServicePort
+        public string ForeignHostServicePort
         {
             get
             {
@@ -218,7 +221,8 @@ namespace NetworksLab2CSharp.Classes
             }
             set
             {
-                value.CopyTo(foreignHostServicePort, 0);
+                foreignHostServicePort = value;
+                //value.CopyTo(foreignHostServicePort, 0);
             }
         }
 
@@ -242,7 +246,7 @@ namespace NetworksLab2CSharp.Classes
         /// Scenario Number for lab part
         /// Default: Scenario 1, 2, or 3
         /// </summary>
-        public int ScenarioNo
+        public string ScenarioNo
         {
             get
             {
@@ -261,13 +265,18 @@ namespace NetworksLab2CSharp.Classes
         public RequestBuilder()
         {
             tcpHeader = "";
+            msTimeStamp = "";
             requestID = "";
             studentName = "";
             studentID = "";
+            responseDelay = "";
             clientIPAddress = "";
+            clientServicePort = "";
+            clientSocketNumber = "";
             foreignHostIPAddress = "";
+            foreignHostServicePort = "";
             studentData = "";
-            scenarioNo = 0;
+            scenarioNo = "";
         }
     }
 }

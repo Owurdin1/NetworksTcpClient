@@ -68,7 +68,15 @@ namespace NetworksLab2CSharp
             // Try to connect the socket to server:
             try
             {
+                //sock.BeginConnect(ipAddr, 
                 sock.Connect(ipAddr, PORT); // 2605);
+                //string testSend = "HI!";
+                //byte[] dataSend = System.Text.Encoding.ASCII.GetBytes(testSend);
+                //sock.Send(dataSend);
+                //byte[] dataReceived = new byte[1024];
+                //sock.Receive(dataReceived);
+
+                //System.Windows.Forms.MessageBox.Show("Connected" + dataReceived.ToString());
                 return sock;
             }
             catch (Exception e)
@@ -206,11 +214,20 @@ namespace NetworksLab2CSharp
         {
             int bytesReceived;
             byte[] receivedBuffer = new byte[1024];
-            bytesReceived = sock.Receive(receivedBuffer);
+            try
+            {
+                bytesReceived = sock.Receive(receivedBuffer);
 
-            string msg = Encoding.ASCII.GetString(receivedBuffer, 0, bytesReceived);
+                string msg = Encoding.ASCII.GetString(receivedBuffer, 0, bytesReceived);
 
-            System.Windows.Forms.MessageBox.Show("Receive function running, have a msg " + msg);
+                System.Windows.Forms.MessageBox.Show("Receive function running, have a msg " + msg);
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+
+            }
+
         }
 
         /// <summary>
@@ -235,7 +252,7 @@ namespace NetworksLab2CSharp
         private Classes.RequestBuilder requestBuilder;
         private int scenarioNo;
         private const string serverIP = "192.168.101.210";
-        private readonly int[] serverPort = new int[5] { 0, 2, 6, 0, 5 };
+        private const string serverPort = "2605";
 
         // Properites for class
         /// <summary>
@@ -281,18 +298,20 @@ namespace NetworksLab2CSharp
             //System.Windows.Forms.MessageBox.Show("IP Address: " + ip);
 
             // set up variables and static properties for the RequestBuilder
+            StringBuilder sb = new StringBuilder();
             string requestID = "Request Num: ";
-            int[] responseDelay;
+            string responseDelay;
             string studentData = "Student Data ";
             int iLength;
+            string slash = "|";
             char[] iValue;
 
             rb.StudentName = "WurdingerO";
             rb.StudentID = "19-3410";
-            rb.ClientSocketNumber = new int[5] { 0, 0, 0, 1, 0 };
+            rb.ClientSocketNumber = sock.Handle.ToString(); //"10"; // new int[5] { 0, 0, 0, 1, 0 };
             rb.ForeignHostIPAddress = serverIP;
             rb.ForeignHostServicePort = serverPort;
-            rb.ScenarioNo = scenarioNo;
+            rb.ScenarioNo = scenarioNo.ToString();
 
             // Set up Stopwatch to keep track of time
             Stopwatch stpWatch = new Stopwatch();
@@ -305,7 +324,7 @@ namespace NetworksLab2CSharp
                 {
                     case 1:
                         rb.RequestID = requestID + i.ToString();
-                        responseDelay = new int[5] { 0, 0, 0, 0, 0 };
+                        responseDelay = "0"; // new int[5] { 0, 0, 0, 0, 0 };
                         rb.ResponseDelay = responseDelay;
 
                         break;
@@ -317,19 +336,19 @@ namespace NetworksLab2CSharp
                         switch (iLength)
                         {
                             case 1:
-                                responseDelay = new int[5] { 2, 0, 0, 0, iValue[0] };
+                                responseDelay = "200" + i.ToString(); // new int[5] { 2, 0, 0, 0, iValue[0] };
                                 rb.ResponseDelay = responseDelay;
 
                                 break;
 
                             case 2:
-                                responseDelay = new int[5] { 2, 0, 0, iValue[0], iValue[1] };
+                                responseDelay = "200" + i.ToString(); //new int[5] { 2, 0, 0, iValue[0], iValue[1] };
                                 rb.ResponseDelay = responseDelay;
 
                                 break;
 
                             default:
-                                responseDelay = new int[5] { 2, 0, 2, 2, 2 };
+                                responseDelay = "20222"; // new int[5] { 2, 0, 2, 2, 2 };
                                 rb.ResponseDelay = responseDelay;
 
                                 break;
@@ -345,19 +364,19 @@ namespace NetworksLab2CSharp
                         switch (iLength)
                         {
                             case 1:
-                                responseDelay = new int[5] { 3, 0, 0, 0, iValue[0] };
+                                responseDelay = "3000"; // new int[5] { 3, 0, 0, 0, iValue[0] };
                                 rb.ResponseDelay = responseDelay;
                                 
                                 break;
 
                             case 2:
-                                responseDelay = new int[5] { 3, 0, 0, iValue[0], iValue[1] };
+                                responseDelay = "300" + i.ToString(); // new int[5] { 3, 0, 0, iValue[0], iValue[1] };
                                 rb.ResponseDelay = responseDelay;
                                 
                                 break;
 
                             default:
-                                responseDelay = new int[5] { 3, 0, 3, 3, 3 };
+                                responseDelay = "30333"; // new int[5] { 3, 0, 3, 3, 3 };
                                 rb.ResponseDelay = responseDelay;
                                 
                                 break;
@@ -371,38 +390,99 @@ namespace NetworksLab2CSharp
                 }
                 // Set time stamp
                 string msTime = Convert.ToString(stpWatch.ElapsedMilliseconds);
-                char[] charTime = msTime.ToCharArray();
-                rb.MSTimeStamp = charTime;
+                if (msTime.Length > 10)
+                {
+                    string newMSTime = "";
+
+                    for (int t = 9; t >= 0; t++)
+                    {
+                        newMSTime += msTime[t];
+                    }
+                    msTime = newMSTime;
+                }
+                rb.MSTimeStamp = msTime;
 
                 // set client IP
                 rb.ClientIPAddress = ip.ToString();
 
                 // set client port
                 string portNum = ((IPEndPoint)sock.LocalEndPoint).Port.ToString();
-                char[] portChar = portNum.ToCharArray();
-                int[] port = new int[5];
-                int t = 0;
-                foreach (char c in portChar)
-                {
-                    port[t] = c;
-                    t++;
-                }
-                rb.ClientServicePort = port;
+                rb.ClientServicePort = portNum;
 
                 // set student data
                 rb.StudentData = studentData + i.ToString();
+
+                // Build the string builder object, get size insert header length
+                sb.Append(rb.MessageType);
+                sb.Append(slash);
+                sb.Append(rb.MSTimeStamp);
+                sb.Append(slash);
+                sb.Append(rb.RequestID);
+                sb.Append(slash);
+                sb.Append(rb.StudentName);
+                sb.Append(slash);
+                sb.Append(rb.StudentID);
+                sb.Append(slash);
+                sb.Append(rb.ClientIPAddress);
+                sb.Append(slash);
+                sb.Append(rb.ClientServicePort);
+                sb.Append(slash);
+                sb.Append(rb.ClientSocketNumber);
+                sb.Append(slash);
+                sb.Append(rb.ForeignHostIPAddress);
+                sb.Append(slash);
+                sb.Append(rb.ForeignHostServicePort);
+                sb.Append(slash);
+                sb.Append(rb.StudentData);
+                sb.Append(slash);
+                sb.Append(rb.ScenarioNo);
+                sb.Append(slash);
+
+                // Get size and insert tcp header
+                string getSize = sb.ToString();
+                byte[] sizeFinder = System.Text.Encoding.ASCII.GetBytes(getSize);
+                //string size = sizeFinder.Length.ToString();
+                int size = sizeFinder.Length;
+
+                byte[] sizeBytes = System.Text.Encoding.ASCII.GetBytes(size.ToString());
+
+                sb.Insert(0, sizeBytes);
+
+                System.Windows.Forms.MessageBox.Show(sb.ToString());
+
+                //string sendSize = getSize.ToString();
+                //sb.Insert(0, System.Text.Encoding.ASCII.GetBytes(Convert.ToString(sendSize, 2)));
+
+                //if (i >= 98)
+                //{
+                //    byte[] test = System.Text.Encoding.ASCII.GetBytes(rb.ScenarioNo.ToString()); // sb.Append(System.Text.Encoding.ASCII.GetBytes(rb.ScenarioNo)).ToString();
+                //    System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(test));
+                    //System.Windows.Forms.MessageBox.Show(sb.ToString() + " Size is: " + size);
+                    //byte[] test = System.Text.Encoding.ASCII.GetBytes(sb.ToString());
+                    //size = System.Text.Encoding.ASCII.GetString(test);
+                    //System.Windows.Forms.MessageBox.Show(size);
+                //}
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(sb.ToString());
+
+                //string msg = String.Empty;
+                //foreach (char c in sb.ToString())
+                //{
+                //    msg += Convert.ToString((char)c, 2);
+                //}
+
+                try
+                {
+                    sock.Send(msg);
+                    System.Windows.Forms.MessageBox.Show("Sent this.ToString(): " + msg.ToString());
+                }
+                catch (Exception e)
+                {
+                    System.Windows.Forms.MessageBox.Show(e.Message);
+                }
+                sb.Clear();
+
+                // send data
             }
-            //rb.MessageType = Encoding.ASCII.GetBytes("REQ");
-
-            ////========================================================================================
-            //FileStream f = new FileStream(PATH, FileMode.Open);
-            //StreamReader sr = new StreamReader(f);
-
-            //string line = sr.ReadLine();
-            //System.Windows.Forms.MessageBox.Show("Line read from file: " + line);
-            //sr.Close();
-            //f.Close();
-            ////========================================================================================
         }
 
         /// <summary>
