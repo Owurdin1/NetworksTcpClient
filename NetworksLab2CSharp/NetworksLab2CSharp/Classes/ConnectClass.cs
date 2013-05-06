@@ -247,7 +247,7 @@ namespace NetworksLab2CSharp
     {
         // Constant variables
         private const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
-        
+        private const int BYTE_LENGTH = 2;
         // Private Variables
         private Classes.RequestBuilder requestBuilder;
         private int scenarioNo;
@@ -441,39 +441,22 @@ namespace NetworksLab2CSharp
                 // Get size and insert tcp header
                 string getSize = sb.ToString();
                 byte[] sizeFinder = System.Text.Encoding.ASCII.GetBytes(getSize);
-                //string size = sizeFinder.Length.ToString();
-                int size = sizeFinder.Length;
+                int size = sizeFinder.Length + BYTE_LENGTH;
 
                 byte[] sizeBytes = System.Text.Encoding.ASCII.GetBytes(size.ToString());
-
                 sb.Insert(0, sizeBytes);
 
                 System.Windows.Forms.MessageBox.Show(sb.ToString());
 
-                //string sendSize = getSize.ToString();
-                //sb.Insert(0, System.Text.Encoding.ASCII.GetBytes(Convert.ToString(sendSize, 2)));
-
-                //if (i >= 98)
-                //{
-                //    byte[] test = System.Text.Encoding.ASCII.GetBytes(rb.ScenarioNo.ToString()); // sb.Append(System.Text.Encoding.ASCII.GetBytes(rb.ScenarioNo)).ToString();
-                //    System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(test));
-                    //System.Windows.Forms.MessageBox.Show(sb.ToString() + " Size is: " + size);
-                    //byte[] test = System.Text.Encoding.ASCII.GetBytes(sb.ToString());
-                    //size = System.Text.Encoding.ASCII.GetString(test);
-                    //System.Windows.Forms.MessageBox.Show(size);
-                //}
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(sb.ToString());
-
-                //string msg = String.Empty;
-                //foreach (char c in sb.ToString())
-                //{
-                //    msg += Convert.ToString((char)c, 2);
-                //}
 
                 try
                 {
                     sock.Send(msg);
+                    byte[] receiveMsg = new byte[size + 100];
+                    int status = sock.Receive(receiveMsg);
                     System.Windows.Forms.MessageBox.Show("Sent this.ToString(): " + msg.ToString());
+                    System.Windows.Forms.MessageBox.Show("Received " + status.ToString() + " bytes, and this text: " + System.Text.Encoding.ASCII.GetChars(receiveMsg).ToString());
                 }
                 catch (Exception e)
                 {
