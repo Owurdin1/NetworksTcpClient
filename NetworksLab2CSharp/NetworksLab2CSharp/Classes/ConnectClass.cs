@@ -216,11 +216,14 @@ namespace NetworksLab2CSharp
             byte[] receivedBuffer = new byte[1024];
             try
             {
-                bytesReceived = sock.Receive(receivedBuffer);
+                do
+                {
+                    bytesReceived = sock.Receive(receivedBuffer, receivedBuffer.Length, 0);
+                    string msg = Encoding.ASCII.GetString(receivedBuffer, 0, bytesReceived);
+                    System.Windows.Forms.MessageBox.Show("Receive function running, have a msg " + msg);
+                }
+                while (bytesReceived > 0);
 
-                string msg = Encoding.ASCII.GetString(receivedBuffer, 0, bytesReceived);
-
-                System.Windows.Forms.MessageBox.Show("Receive function running, have a msg " + msg);
             }
             catch (Exception e)
             {
@@ -441,7 +444,8 @@ namespace NetworksLab2CSharp
                 // Get size and insert tcp header
                 string getSize = sb.ToString();
                 byte[] sizeFinder = System.Text.Encoding.ASCII.GetBytes(getSize);
-                int size = sizeFinder.Length + BYTE_LENGTH;
+                int size = sizeFinder.Length;
+                size += size.ToString().Length;
 
                 byte[] sizeBytes = System.Text.Encoding.ASCII.GetBytes(size.ToString());
                 sb.Insert(0, sizeBytes);
@@ -454,9 +458,11 @@ namespace NetworksLab2CSharp
                 {
                     sock.Send(msg);
                     byte[] receiveMsg = new byte[size + 100];
-                    int status = sock.Receive(receiveMsg);
-                    System.Windows.Forms.MessageBox.Show("Sent this.ToString(): " + msg.ToString());
-                    System.Windows.Forms.MessageBox.Show("Received " + status.ToString() + " bytes, and this text: " + System.Text.Encoding.ASCII.GetChars(receiveMsg).ToString());
+                    //int status = sock.Receive(receiveMsg);
+                    System.Windows.Forms.MessageBox.Show("Sent this.ToString(): " + msg.ToString() + " This size: " + size.ToString());
+                    //System.Windows.Forms.MessageBox.Show("Received " + status.ToString() 
+                    //    + " bytes, and this text: " + 
+                    //    System.Text.Encoding.ASCII.GetChars(receiveMsg).ToString());
                 }
                 catch (Exception e)
                 {
