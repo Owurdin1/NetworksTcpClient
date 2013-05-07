@@ -22,9 +22,6 @@ namespace NetworksLab2CSharp
         {
             ConnectClass cClass = new ConnectClass();
 
-            string test = cClass.ConnectCreated();
-            startLabel.Text = test;
-
             // Set scenario Number for ConnectClass
             cClass.ScenarioNo = Convert.ToInt32(scenarioListBox.SelectedItem);
 

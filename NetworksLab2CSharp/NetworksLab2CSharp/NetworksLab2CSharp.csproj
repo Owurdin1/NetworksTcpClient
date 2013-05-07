@@ -46,8 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ConnectClass.cs" />
+    <Compile Include="Classes\LogBuilder.cs" />
+    <Compile Include="Classes\ReceiverClass.cs" />
     <Compile Include="Classes\RequestBuilder.cs" />
     <Compile Include="Classes\ResponseClass.cs" />
+    <Compile Include="Classes\Sender.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
