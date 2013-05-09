@@ -89,15 +89,28 @@ namespace NetworksLab2CSharp.Classes
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
                 + serverPort + "|StudentData:" + i + "|1|");
 
+            // Length of msg
             int msgLength = msg.Length;
 
+            // convert message length to byte array
             byte[] lengthByte = System.Text.Encoding.ASCII.GetBytes((msgLength
                 + msgLength.ToString().Length).ToString());
 
+            // create sendMsg byte array
             byte[] sendMsg = new byte[msgLength + lengthByte.Length];
+            //byte[] sendMsg = new byte[msgLength.ToString().Length + msg.Length];
 
-            Array.Copy(lengthByte, 0, sendMsg, 0, lengthByte.Length);
-            Array.Copy(msg, 0, sendMsg, lengthByte.Length, msg.Length);
+            //Array.Copy(lengthByte, 0, sendMsg, 0, lengthByte.Length);
+            //Array.Copy(msg, 0, sendMsg, lengthByte.Length, msg.Length);
+
+            //byte[] test = new byte[msgLength.ToString().Length];
+            //for (int s = 0; s < test.Length; s++)
+            //{
+            //    //test[s] = msgLength.ToString().ToCharArray();
+            //}
+
+            Array.Copy(msgLength.ToString().ToCharArray(), sendMsg, msgLength.ToString().Length);
+            Array.Copy(msg, 0, sendMsg, msgLength.ToString().Length, msgLength.ToString().Length + msg.Length);
 
             return sendMsg;
         }
