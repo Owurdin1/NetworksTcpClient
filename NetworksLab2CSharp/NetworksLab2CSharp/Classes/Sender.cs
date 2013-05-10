@@ -54,23 +54,27 @@ namespace NetworksLab2CSharp
         /// <param name="sock"></param>
         public void SendData(Socket sock)
         {
+            // Prepare file for IO operations
+            string path = @"c:\Logs\Lab2.Scenario1.WurdingerO.txt";
+            StreamWriter logWrite = File.AppendText(path);
+
             // Get local ip address:
             IPAddress ip = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
-
             string portNum = ((IPEndPoint)sock.LocalEndPoint).Port.ToString();
 
             // response time for scenario 2 and 3
             int responseTime = 0;
-
-            // setup receiving thread
-            Thread receiveThread = new Thread(ReceiveThread);
-            receiveThread.Start(sock);
-
-            // Set time stamp
+            
             // Set up Stopwatch to keep track of time
             Stopwatch stpWatch = new Stopwatch();
             stpWatch.Start();
-            for (int i = 0; i < 10; i++)
+
+            // setup receiving thread
+            //Thread receiveThread = new Thread(ReceiveThread);
+            //receiveThread.Start(sock);
+
+            // Counter to call client operations
+            for (int i = 0; i < 100; i++)
             {
                 string msTime = Convert.ToString(stpWatch.ElapsedMilliseconds);
                 if (msTime.Length > 10)
@@ -128,7 +132,15 @@ namespace NetworksLab2CSharp
                 try
                 {
                     // Send the message to server.
+                    byte[] receiveMsg = new byte[256];
                     sock.Send(sendMsg);
+                    int receivedBytes = sock.Receive(receiveMsg);
+                    byte[] printMsg = new byte[receivedBytes];
+                    Array.Copy(receiveMsg, printMsg, receivedBytes);
+
+                    logWrite.Write("<CR><LF>");
+                    logWrite.Write(System.Text.Encoding.ASCII.GetString(printMsg));
+                    logWrite.Write("\r");
                 }
                 catch (Exception ex)
                 {
@@ -137,8 +149,22 @@ namespace NetworksLab2CSharp
                 }
                 //System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(sendMsg));
             }
-            LogBuilder lb = new LogBuilder();
-            lb.LogClose(sock);
+
+            // Socket shutdown
+            sock.Shutdown(SocketShutdown.Receive);
+            sock.Shutdown(SocketShutdown.Send);
+
+            string date = System.DateTime.Now.ToString("MMddyyyy");
+            string time = System.DateTime.Now.ToString("HHmmss");
+
+            logWrite.Write(date + "|" + time + "|0|0|");
+
+            // Close log file
+            logWrite.Close();
+            System.Windows.Forms.MessageBox.Show("Finished");
+
+            //LogBuilder lb = new LogBuilder();
+            //lb.LogClose(sock);
         }
 
         /// <summary>
@@ -151,30 +177,48 @@ namespace NetworksLab2CSharp
         /// </param>
         private static void ReceiveThread(object data)
         {
-            // Create a socket and pass in parameter converted from object to socket
-            Socket sock = (Socket)data;
+                // Create a socket and pass in parameter converted from object to socket
+                Socket sock = (Socket)data;
 
-            int receivedBytes = 0;
+                int receivedBytes = 0;
 
-            do
-            {
-                // Receive message and print to log file.
+                // create instance of LogBuilder
+                LogBuilder lb = new LogBuilder();
+
+                // create byte arrays for receive messages
                 byte[] oldMsg = new byte[256];
                 byte[] receiveMsg = new byte[256];
-                receivedBytes = sock.Receive(receiveMsg);
 
-                //if (receiveMsg.Equals(oldMsg))
-                //{
-                //    break;
-                //}
-                //else
-                //{
-                //    Array.Clear(oldMsg, 0, 256);
-                //    Array.Copy(receiveMsg, oldMsg, receivedBytes);
-                //}
+                // while receiving something spin on receive
+            do
+            {
+                try
+                {
+                        // Receive message and print to log file.
+                        receivedBytes = sock.Receive(receiveMsg);
 
-                LogBuilder lb = new LogBuilder();
-                lb.LogWriter(receivedBytes, receiveMsg, sock);
+                        if (!receiveMsg.Equals(oldMsg))
+                        {
+                            // write to log file
+                            lb.LogWriter(receivedBytes, receiveMsg, sock);
+
+                            // clear oldMsg array for next piece
+                            Array.Clear(oldMsg, 0, 256);
+                            Array.Copy(receiveMsg, oldMsg, receivedBytes);
+                        }
+                }
+                catch (ObjectDisposedException ode)
+                {
+                    System.Windows.Forms.MessageBox.Show(ode.Message);
+                }
+                catch (SocketException se)
+                {
+                    System.Windows.Forms.MessageBox.Show(se.Message);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.Message);
+                }
             }
             while (receivedBytes > 0);
 
