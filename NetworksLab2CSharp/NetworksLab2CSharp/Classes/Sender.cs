@@ -17,6 +17,7 @@ namespace NetworksLab2CSharp
         // Constant variables
         private const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
         private const int BYTE_LENGTH = 2;
+
         // Private Variables
         private int scenarioNo;
         private const string serverIP = "192.168.101.210";
@@ -53,20 +54,23 @@ namespace NetworksLab2CSharp
         /// <param name="sock"></param>
         public void SendData(Socket sock)
         {
-            // Prepare file for IO operations
-            string path = @"c:\Logs\Lab2.Scenario1.WurdingerO.txt";
-            StreamWriter logWrite = File.AppendText(path);
-            
             // Get local ip address:
             IPAddress ip = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
 
             string portNum = ((IPEndPoint)sock.LocalEndPoint).Port.ToString();
 
+            // response time for scenario 2 and 3
+            int responseTime = 0;
+
+            // setup receiving thread
+            Thread receiveThread = new Thread(ReceiveThread);
+            receiveThread.Start(sock);
+
             // Set time stamp
             // Set up Stopwatch to keep track of time
             Stopwatch stpWatch = new Stopwatch();
             stpWatch.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 string msTime = Convert.ToString(stpWatch.ElapsedMilliseconds);
                 if (msTime.Length > 10)
@@ -81,8 +85,6 @@ namespace NetworksLab2CSharp
                 }
 
                 Classes.RequestBuilder reqB = new Classes.RequestBuilder();
-                //Classes.RequestBuilder reqB = new Classes.RequestBuilder(sock, msTime, ip.ToString(), 
-                //    portNum, scenarioNo, serverPort, serverIP, i);
 
                 byte[] sendMsg;
 
@@ -93,8 +95,24 @@ namespace NetworksLab2CSharp
                             ip.ToString(), portNum, serverPort, serverIP, i);
                         break;
                     case 2:
+                        // set up response time delay
+
+                        switch (i)
+                        {
+                            case 1:
+                                responseTime = 1000;
+                                break;
+                            case 3:
+                                responseTime = 3000;
+                                break;
+                            default: 
+                                responseTime = 0;
+                                break;
+                        }
+
                         sendMsg = reqB.MessageBuildScenarioTwo(sock, msTime,
-                            ip.ToString(), portNum, serverPort, serverIP, i);
+                            ip.ToString(), portNum, serverPort, serverIP, i, responseTime);
+
                         break;
                     case 3:
                         sendMsg = reqB.MessageBuildScenarioThree(sock, msTime,
@@ -111,17 +129,6 @@ namespace NetworksLab2CSharp
                 {
                     // Send the message to server.
                     sock.Send(sendMsg);
-
-                    // Receive message and print to log file.
-                    byte[] receiveMsg = new byte[256]; // = new byte[sendMsg.Length + 10];
-
-                    int receivedBytes = sock.Receive(receiveMsg);
-                    byte[] printMsg = new byte[receivedBytes];
-                    Array.Copy(receiveMsg, printMsg, receivedBytes);
-
-                    logWrite.Write("<CR><LF>");
-                    logWrite.Write(System.Text.Encoding.ASCII.GetString(printMsg));
-                    logWrite.Write("\r");
                 }
                 catch (Exception ex)
                 {
@@ -130,9 +137,61 @@ namespace NetworksLab2CSharp
                 }
                 //System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(sendMsg));
             }
-            // Close log file
-            logWrite.Close();
-            System.Windows.Forms.MessageBox.Show("Finished");
+            LogBuilder lb = new LogBuilder();
+            lb.LogClose(sock);
+        }
+
+        /// <summary>
+        /// Thread start function to listen on an althernate
+        /// therad and begin print and logging operations
+        /// </summary>
+        /// <param name="data">
+        /// Takes an Object, in this case it will
+        /// be a Socket.
+        /// </param>
+        private static void ReceiveThread(object data)
+        {
+            // Create a socket and pass in parameter converted from object to socket
+            Socket sock = (Socket)data;
+
+            int receivedBytes = 0;
+
+            do
+            {
+                // Receive message and print to log file.
+                byte[] oldMsg = new byte[256];
+                byte[] receiveMsg = new byte[256];
+                receivedBytes = sock.Receive(receiveMsg);
+
+                //if (receiveMsg.Equals(oldMsg))
+                //{
+                //    break;
+                //}
+                //else
+                //{
+                //    Array.Clear(oldMsg, 0, 256);
+                //    Array.Copy(receiveMsg, oldMsg, receivedBytes);
+                //}
+
+                LogBuilder lb = new LogBuilder();
+                lb.LogWriter(receivedBytes, receiveMsg, sock);
+            }
+            while (receivedBytes > 0);
+
+            #region savedCode
+            //// Create instance of SenderClass
+            //SenderClass sClass = new SenderClass();
+
+            //// Set scenario version with the SenderClass
+            //sClass.ScenarioNo = scenarioNo;
+
+            //// Begin send algorithm
+            //sClass.SendData(sock);
+
+
+            //string threadWork = sClass.SenderCreated();
+            //System.Windows.Forms.MessageBox.Show("Thread running for sender! " + threadWork);
+            #endregion
         }
     }
 }

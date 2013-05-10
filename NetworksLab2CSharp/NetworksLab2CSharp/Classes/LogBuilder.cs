@@ -50,16 +50,41 @@ namespace NetworksLab2CSharp
             responseClass = rc;
         }
 
-        /// <summary>
-        /// Test function to ensure that class and members can be accessed
-        /// </summary>
-        /// <returns>
-        /// returns a string that helps confirm that function is accessible.
-        /// </returns>
-        public string LogBuilderCreated()
+        public void LogWriter(int receivedBytes, byte[] receiveMsg, Socket sock)
         {
-            string positive = "We've created a LogBuilder class!";
-            return positive;
+            // Prepare file for IO operations
+            string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
+            StreamWriter logWrite = File.AppendText(path);
+
+            byte[] printMsg = new byte[receivedBytes];
+            Array.Copy(receiveMsg, printMsg, receivedBytes);
+
+            logWrite.Write("<CR><LF>");
+            logWrite.Write(System.Text.Encoding.ASCII.GetString(printMsg));
+            logWrite.Write("\r");
+            //System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(printMsg));
+
+            logWrite.Close();
+        }
+
+        public void LogClose(Socket sock)
+        {
+            // Prepare file for IO operations
+            string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
+            StreamWriter logWrite = File.AppendText(path);
+
+            // Socket shutdown
+            sock.Shutdown(SocketShutdown.Receive);
+            sock.Shutdown(SocketShutdown.Send);
+
+            string date = System.DateTime.Now.ToString("MMddyyyy");
+            string time = System.DateTime.Now.ToString("HHmmss");
+
+            logWrite.Write(date + "|" + time + "|0|0|");
+
+            // Close log file
+            logWrite.Close();
+            System.Windows.Forms.MessageBox.Show("Finished");
         }
     }
 }
