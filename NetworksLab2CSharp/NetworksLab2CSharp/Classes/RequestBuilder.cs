@@ -84,34 +84,53 @@ namespace NetworksLab2CSharp.Classes
             string serverPort, string serverIP, int i)
         {
             // Hard code and build string.
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime
-                + "|RequestNo:" + i + "|WurdingerO|19-3410|" + ip.ToString()
+            string msgString = "REQ|" + msTime
+                + "|RequestNo:" + i + "|WurdingerO|19-3410|" + "0|" + ip.ToString()
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
-                + serverPort + "|StudentData:" + i + "|1|");
+                + serverPort + "|StudentData:" + i + "|1|";
+            //System.Windows.Forms.MessageBox.Show(msgString);
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(msgString);
 
             // Length of msg
-            int msgLength = msg.Length;
+            short msgLength = (short)msg.Length;
 
             // convert message length to byte array
-            byte[] lengthByte = System.Text.Encoding.ASCII.GetBytes((msgLength
-                + msgLength.ToString().Length).ToString());
+            //byte[] lengthByte = System.Text.Encoding.ASCII.GetBytes((msgLength
+            //    + msgLength.ToString().Length).ToString());
+            byte[] byteLength = BitConverter.GetBytes(msgLength);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(byteLength); //.Reverse();
+                //System.Windows.Forms.MessageBox.Show("Reversing Array");
+            }
 
             // create sendMsg byte array
-            byte[] sendMsg = new byte[msgLength + lengthByte.Length];
+            //byte[] sendMsg = new byte[msgLength + lengthByte.Length];
             //byte[] sendMsg = new byte[msgLength.ToString().Length + msg.Length];
+            byte[] sendMsg = new byte[byteLength.Length + msgLength];
 
+            // Copy arrays to get one single sendMsg array
+            #region Comment
             //Array.Copy(lengthByte, 0, sendMsg, 0, lengthByte.Length);
-            //Array.Copy(msg, 0, sendMsg, lengthByte.Length, msg.Length);
-
+            ////Array.Copy(msg, 0, sendMsg, lengthByte.Length, msg.Length);
+            //Array.Copy(byteLength, 0, sendMsg, 0, byteLength.Length);
+            //Array.Copy(msg, byteLength.Length, sendMsg, 0, byteLength.Length);
+            #endregion
+            Array.Copy(byteLength, sendMsg, byteLength.Length);
+            Array.Copy(msg, 0, sendMsg, byteLength.Length, msgLength);
+            //System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(sendMsg));
+            
+            #region commentagain
             //byte[] test = new byte[msgLength.ToString().Length];
             //for (int s = 0; s < test.Length; s++)
             //{
             //    //test[s] = msgLength.ToString().ToCharArray();
             //}
 
-            Array.Copy(msgLength.ToString().ToCharArray(), sendMsg, msgLength.ToString().Length);
-            Array.Copy(msg, 0, sendMsg, msgLength.ToString().Length, msgLength.ToString().Length + msg.Length);
-
+            //Array.Copy(msgLength.ToString().ToCharArray(), sendMsg, msgLength.ToString().Length);
+            //Array.Copy(msg, 0, sendMsg, msgLength.ToString().Length, msgLength.ToString().Length + msg.Length);
+            #endregion
             return sendMsg;
         }
 

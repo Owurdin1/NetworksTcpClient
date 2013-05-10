@@ -155,8 +155,8 @@ namespace NetworksLab2CSharp
             // Create threads and send them off to do their thing
 
             // Receiver thread
-            Thread receiverThread = new Thread(ConnectClass.ReceiverThreadStart);
-            receiverThread.Start(inputSock);
+            //Thread receiverThread = new Thread(ConnectClass.ReceiverThreadStart);
+            //receiverThread.Start(inputSock);
 
             // Sender thread
             Thread senderThread = new Thread(ConnectClass.SenderThreadStart);
