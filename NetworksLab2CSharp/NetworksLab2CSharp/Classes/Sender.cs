@@ -22,6 +22,7 @@ namespace NetworksLab2CSharp
         private int scenarioNo;
         private const string serverIP = "192.168.101.210";
         private const string serverPort = "2605";
+        //private static bool SendDone = false;
 
         // Properites for class
         /// <summary>
@@ -38,15 +39,7 @@ namespace NetworksLab2CSharp
                 scenarioNo = value;
             }
         }
-
-        /// <summary>
-        /// Default constructor for SenderClass
-        /// </summary>
-        public SenderClass()
-        {
-
-        }
-
+        
         /// <summary>
         /// Sends data through the connected socket, pulled
         /// from the IOFiles/Request.txt file. Converted to bytes.
@@ -55,7 +48,7 @@ namespace NetworksLab2CSharp
         public void SendData(Socket sock)
         {
             // Prepare file for IO operations
-            string path = @"c:\Logs\Lab2.Scenario1.WurdingerO.txt";
+            string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
             StreamWriter logWrite = File.AppendText(path);
 
             // Get local ip address:
@@ -72,6 +65,8 @@ namespace NetworksLab2CSharp
             // setup receiving thread
             //Thread receiveThread = new Thread(ReceiveThread);
             //receiveThread.Start(sock);
+            //ReceiverClass rc = new ReceiverClass();
+            //rc.Sock = sock;
 
             // Counter to call client operations
             for (int i = 0; i < 100; i++)
@@ -133,7 +128,14 @@ namespace NetworksLab2CSharp
                 {
                     // Send the message to server.
                     byte[] receiveMsg = new byte[256];
+
+
+                    //Thread receiveThread = new Thread(ReceiveThread);
+                    //receiveThread.Start(sock);
+
                     sock.Send(sendMsg);
+
+
                     int receivedBytes = sock.Receive(receiveMsg);
                     byte[] printMsg = new byte[receivedBytes];
                     Array.Copy(receiveMsg, printMsg, receivedBytes);
@@ -144,15 +146,20 @@ namespace NetworksLab2CSharp
                 }
                 catch (Exception ex)
                 {
-
                     System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
                 //System.Windows.Forms.MessageBox.Show(System.Text.Encoding.ASCII.GetString(sendMsg));
             }
 
             // Socket shutdown
-            sock.Shutdown(SocketShutdown.Receive);
             sock.Shutdown(SocketShutdown.Send);
+
+            //receiveThread.Join();
+
+            sock.Shutdown(SocketShutdown.Receive);
+
+            //string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
+            //StreamWriter logWrite = File.AppendText(path);
 
             string date = System.DateTime.Now.ToString("MMddyyyy");
             string time = System.DateTime.Now.ToString("HHmmss");
@@ -175,67 +182,29 @@ namespace NetworksLab2CSharp
         /// Takes an Object, in this case it will
         /// be a Socket.
         /// </param>
-        private static void ReceiveThread(object data)
-        {
-                // Create a socket and pass in parameter converted from object to socket
-                Socket sock = (Socket)data;
+        //private static void ReceiveThread(object data)
+        //{
+        //    // Create a socket and pass in parameter converted from object to socket
+        //    Socket sock = (Socket)data;
 
-                int receivedBytes = 0;
+        //    // Set up log builder
+        //    ReceiverClass rc = new ReceiverClass();
 
-                // create instance of LogBuilder
-                LogBuilder lb = new LogBuilder();
+        //    // set up buffer for receiving
+        //    byte[] oldMsg = new byte[rc.BufferSize];
+        //    int receivedBytes = 0;
 
-                // create byte arrays for receive messages
-                byte[] oldMsg = new byte[256];
-                byte[] receiveMsg = new byte[256];
+        //    do
+        //    {
+        //        receivedBytes = sock.Receive(rc.buffer);
+        //        byte[] formattedMsg = new byte[receivedBytes];
+        //        Array.Copy(rc.buffer, formattedMsg, receivedBytes);
+        //        rc.sb.Append("<LF><CR>" + System.Text.Encoding.ASCII.GetString(formattedMsg) + "\r\n");
+        //    }
+        //    while (receivedBytes > 0);
 
-                // while receiving something spin on receive
-            do
-            {
-                try
-                {
-                        // Receive message and print to log file.
-                        receivedBytes = sock.Receive(receiveMsg);
-
-                        if (!receiveMsg.Equals(oldMsg))
-                        {
-                            // write to log file
-                            lb.LogWriter(receivedBytes, receiveMsg, sock);
-
-                            // clear oldMsg array for next piece
-                            Array.Clear(oldMsg, 0, 256);
-                            Array.Copy(receiveMsg, oldMsg, receivedBytes);
-                        }
-                }
-                catch (ObjectDisposedException ode)
-                {
-                    System.Windows.Forms.MessageBox.Show(ode.Message);
-                }
-                catch (SocketException se)
-                {
-                    System.Windows.Forms.MessageBox.Show(se.Message);
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.Forms.MessageBox.Show(ex.Message);
-                }
-            }
-            while (receivedBytes > 0);
-
-            #region savedCode
-            //// Create instance of SenderClass
-            //SenderClass sClass = new SenderClass();
-
-            //// Set scenario version with the SenderClass
-            //sClass.ScenarioNo = scenarioNo;
-
-            //// Begin send algorithm
-            //sClass.SendData(sock);
-
-
-            //string threadWork = sClass.SenderCreated();
-            //System.Windows.Forms.MessageBox.Show("Thread running for sender! " + threadWork);
-            #endregion
-        }
+        //    LogBuilder lb = new LogBuilder();
+        //    lb.BuildLog(rc);
+        //}
     }
 }

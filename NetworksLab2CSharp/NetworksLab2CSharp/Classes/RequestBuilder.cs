@@ -143,7 +143,7 @@ namespace NetworksLab2CSharp.Classes
         {
             // Hard code and build string.
             byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime
-                + "|RequestNo:" + i + "|WurdingerO|19-3410|0|" + ip
+                + "|RequestNo:" + i + "|WurdingerO|19-3410|" + responseTime + "|" + ip
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
                 + serverPort + "|StudentData:" + i + "|2|");
 
