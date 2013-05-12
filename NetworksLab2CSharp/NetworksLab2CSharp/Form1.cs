@@ -26,11 +26,11 @@ namespace NetworksLab2CSharp
             cClass.ScenarioNo = Convert.ToInt32(scenarioListBox.SelectedItem);
 
             // Create Socket and ask ConnectClass to connect
-            //Socket sock = null;
-            //sock = cClass.ConnectToServer();
+            Socket sock = null;
+            sock = cClass.ConnectToServer();
 
             // Call the thread building funciton to begin send/receive
-            //cClass.ThreadBuilder(sock);
+            cClass.ThreadBuilder(sock);
          }
 
         private void finishButton_Click(object sender, EventArgs e)

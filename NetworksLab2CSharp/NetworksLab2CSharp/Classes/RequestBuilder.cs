@@ -194,11 +194,16 @@ namespace NetworksLab2CSharp.Classes
         /// a byte array containing formatted message
         /// </returns>
         public byte[] MessageBuildScenarioThree(Socket sock, string msTime, string ip, string portNum, 
-            string serverPort, string serverIP, int i)
+            string serverPort, string serverIP, int i, int responseTime)
         {
             // Hard code and build string.
+            //byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime
+            //    + "|RequestNo:" + i + "|WurdingerO|19-3410|" + ip.ToString()
+            //    + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
+            //    + serverPort + "|StudentData:" + i + "|3|");
+
             byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime
-                + "|RequestNo:" + i + "|WurdingerO|19-3410|" + ip.ToString()
+                + "|RequestNo:" + i + "|WurdingerO|19-3410|" + responseTime + "|" + ip
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
                 + serverPort + "|StudentData:" + i + "|3|");
 

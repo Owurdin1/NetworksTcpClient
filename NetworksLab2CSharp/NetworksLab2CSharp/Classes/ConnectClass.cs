@@ -235,16 +235,16 @@ namespace NetworksLab2CSharp
             Socket sock = (Socket)data;
 
             // Create instance of SenderClass
-            //SenderClass sClass = new SenderClass();
-            SenderClassScenario3 s3Class = new SenderClassScenario3();
+            SenderClass sClass = new SenderClass();
+            //SenderClassScenario3 s3Class = new SenderClassScenario3();
 
             // Set scenario version with the SenderClass
-            //sClass.ScenarioNo = scenarioNo;
-            s3Class.ScenarioNo = scenarioNo;
+            sClass.ScenarioNo = scenarioNo;
+            //s3Class.ScenarioNo = scenarioNo;
 
             // Begin send algorithm
-            //sClass.SendData(sock);
-            s3Class.SendData(sock);
+            sClass.SendData(sock);
+            //s3Class.SendData(sock);
 
 
             //string threadWork = sClass.SenderCreated();
