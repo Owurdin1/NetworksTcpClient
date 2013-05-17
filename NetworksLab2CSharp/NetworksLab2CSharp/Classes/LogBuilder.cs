@@ -19,7 +19,7 @@ namespace NetworksLab2CSharp
             string logMessage = rc.sb.ToString();
 
             // Open log file and print string
-            string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
+            string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.WORKING_SERVER.txt";
             StreamWriter logWrite = File.AppendText(path);
 
             logWrite.Write(logMessage);

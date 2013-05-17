@@ -17,12 +17,14 @@ namespace NetworksLab2CSharp
         // Constant variables
         private const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
         private const int BYTE_LENGTH = 2;
-        private const int MESSAGE_COUNT = 100;
+        private const int MESSAGE_COUNT = 5000;
         
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.101.210";
+        //private const string serverIP = "192.168.101.210";
+        //private const string serverIP = "10.220.8.161";
+        private const string serverIP = "192.168.1.35";
         private const string serverPort = "2605";
         private static Object sockLock = new Object();
         private static Object logLock = new Object();
@@ -54,7 +56,7 @@ namespace NetworksLab2CSharp
         public void SendData(Socket sock)
         {
             // Set socket timeout
-            sock.ReceiveTimeout = 4070;
+            //sock.ReceiveTimeout = 4070;
 
             // Prepare file for IO operations
             string path = @"c:\Logs\Lab2.Scenario3.WurdingerO.txt";
@@ -165,8 +167,9 @@ namespace NetworksLab2CSharp
 
                     sock.Send(sendMsg);
 
-                    Thread.Sleep(30);
+                    Thread.Sleep(10);
 
+                    #region savePiece
                     //receiveThread.Start();
 
                     //int receivedBytes = sock.Receive(receiveMsg);
@@ -176,6 +179,8 @@ namespace NetworksLab2CSharp
                     //logWrite.Write("<CR><LF>");
                     //logWrite.Write(System.Text.Encoding.ASCII.GetString(printMsg));
                     //logWrite.Write("\r");
+                    #endregion
+
                 }
                 catch (Exception ex)
                 {
@@ -235,7 +240,7 @@ namespace NetworksLab2CSharp
                         receivedBytes = sock.Receive(rc.buffer);
                         byte[] formattedMsg = new byte[receivedBytes];
                         Array.Copy(rc.buffer, formattedMsg, receivedBytes);
-                        rc.sb.Append("<LF><CR>" + System.Text.Encoding.ASCII.GetString(formattedMsg) + "\r\n");
+                        rc.sb.Append(System.Text.Encoding.ASCII.GetString(formattedMsg) + "\r\n");
                     }
                     catch (SocketException se)
                     {
@@ -244,6 +249,7 @@ namespace NetworksLab2CSharp
                 }
                 while (receivedBytes > 0);
 
+            #region savedCode
             //// Create a socket and pass in parameter converted from object to socket
             //Socket sock = (Socket)data;
 
@@ -265,6 +271,7 @@ namespace NetworksLab2CSharp
 
             //LogBuilder lb = new LogBuilder();
             //lb.BuildLog(rc);
+#endregion
         }
     }
 }

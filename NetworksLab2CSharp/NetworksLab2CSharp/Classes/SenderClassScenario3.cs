@@ -20,7 +20,8 @@ namespace NetworksLab2CSharp
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.101.210";
+        //private const string serverIP = "192.168.101.210";
+        private const string serverIP = "127.0.0.1";
         private const string serverPort = "2605";
         //private static bool SendDone = false;
 
