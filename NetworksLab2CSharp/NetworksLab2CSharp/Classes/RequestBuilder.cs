@@ -139,13 +139,17 @@ namespace NetworksLab2CSharp.Classes
         /// a byte array containing formatted message
         /// </returns>
         public byte[] MessageBuildScenarioTwo(Socket sock, string msTime, string ip, string portNum,
-            string serverPort, string serverIP, int i, int responseTime)
+            string serverPort, string serverIP, int i, int responseTime, LogBuilder lb)
         {
             // Hard code and build string.
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime
+            string stringMsg = "REQ|" + msTime
                 + "|RequestNo:" + i + "|WurdingerO|19-3410|" + responseTime + "|" + ip
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
-                + serverPort + "|StudentData:" + i + "|2|");
+                + serverPort + "|StudentData:" + i + "|2|";
+
+            lb.sentMsgs.Add(stringMsg);
+
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(stringMsg);
 
             // Length of msg
             short msgLength = (short)msg.Length;
@@ -194,7 +198,7 @@ namespace NetworksLab2CSharp.Classes
         /// a byte array containing formatted message
         /// </returns>
         public byte[] MessageBuildScenarioThree(Socket sock, string msTime, string ip, string portNum, 
-            string serverPort, string serverIP, int i, int responseTime)
+            string serverPort, string serverIP, int i, int responseTime, LogBuilder lb)
         {
             // Hard code and build string.
             //byte[] msg = System.Text.Encoding.ASCII.GetBytes("REQ|" + msTime

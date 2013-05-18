@@ -17,18 +17,19 @@ namespace NetworksLab2CSharp
         // Constant variables
         private const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
         private const int BYTE_LENGTH = 2;
-        private const int MESSAGE_COUNT = 5000;
+        private const int MESSAGE_COUNT = 100;
         
 
         // Private Variables
         private int scenarioNo;
-        //private const string serverIP = "192.168.101.210";
+        private const string serverIP = "192.168.101.210";
         //private const string serverIP = "10.220.8.161";
-        private const string serverIP = "192.168.1.35";
+        //private const string serverIP = "192.168.1.35";
         private const string serverPort = "2605";
-        private static Object sockLock = new Object();
-        private static Object logLock = new Object();
+        //private static Object sockLock = new Object();
+        //private static Object logLock = new Object();
         private Thread[] threads = new Thread[MESSAGE_COUNT];
+        private List<byte[]> sentMesgs = new List<byte[]>();
 
         //private static bool SendDone = false;
 
@@ -58,8 +59,12 @@ namespace NetworksLab2CSharp
             // Set socket timeout
             //sock.ReceiveTimeout = 4070;
 
+            // create instance of LogBuilder
+            LogBuilder lb = new LogBuilder();
+
             // Prepare file for IO operations
-            string path = @"c:\Logs\Lab2.Scenario3.WurdingerO.txt";
+            //string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
+            string path = @"Lab2.Scenario2.WurdingerO.WORKING_SERVER.txt";
             StreamWriter logWrite = File.AppendText(path);
 
             // Get local ip address:
@@ -127,7 +132,7 @@ namespace NetworksLab2CSharp
                         }
 
                         sendMsg = reqB.MessageBuildScenarioTwo(sock, msTime,
-                            ip.ToString(), portNum, serverPort, serverIP, i, responseTime);
+                            ip.ToString(), portNum, serverPort, serverIP, i, responseTime, lb);
 
                         break;
                     case 3:
@@ -146,7 +151,7 @@ namespace NetworksLab2CSharp
                         }
 
                         sendMsg = reqB.MessageBuildScenarioThree(sock, msTime,
-                            ip.ToString(), portNum, serverPort, serverIP, i, responseTime);
+                            ip.ToString(), portNum, serverPort, serverIP, i, responseTime, lb);
                         break;
 
                     default:
@@ -166,7 +171,6 @@ namespace NetworksLab2CSharp
                     //receiveThread.Start(sock);
 
                     sock.Send(sendMsg);
-
                     Thread.Sleep(10);
 
                     #region savePiece
@@ -211,10 +215,47 @@ namespace NetworksLab2CSharp
 
             // Close log file
             logWrite.Close();
-            System.Windows.Forms.MessageBox.Show("Finished");
 
-            //LogBuilder lb = new LogBuilder();
+            //lb.BuildSentLog();
             //lb.LogClose(sock);
+            WriteLog(lb);
+
+            System.Windows.Forms.MessageBox.Show("Finished");
+        }
+
+        private void WriteLog(LogBuilder lb)
+        {
+            string path = @"c:\Logs\Lab2.Scenario2.SentMessages.txt";
+            StreamWriter sentMsg = new StreamWriter(path);
+
+            foreach (string s in lb.sentMsgs)
+            {
+                sentMsg.Write(s + "\r\n");
+            }
+
+            sentMsg.Close();
+
+
+            //foreach (string b in lb.sentMsgs)
+            //{
+            //    File.AppendAllText(path, );
+            //}
+
+            //StreamWriter sentWrite = File.AppendText(path);
+
+            ////foreach (string b in sentMsgs)
+            ////{
+            ////    //string value = System.Text.Encoding.ASCII.GetString(b);
+            ////    sentWrite.Write(b);
+            ////}
+
+            //for (int i = 0; i < lb.sentMsgs.Count; i++)
+            //{
+            //    sentWrite.Write(lb.sentMsgs[i]);
+            //    //sentWrite.Write("test/r/n");
+            //}
+
+            //sentWrite.Close();
         }
 
         /// <summary>

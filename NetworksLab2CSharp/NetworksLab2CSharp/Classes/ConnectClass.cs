@@ -16,9 +16,9 @@ namespace NetworksLab2CSharp
     {
         // Constant variables
         private const int PORT = 2605;
-        //private readonly byte[] ipConnection = new byte[4] { 192, 168, 101, 210 };
+        private readonly byte[] ipConnection = new byte[4] { 192, 168, 101, 210 };
         //private readonly byte[] ipConnection = new byte[4] { 10, 220, 8, 161 };
-        private readonly byte[] ipConnection = new byte[4] { 192, 168, 1, 35 };
+        //private readonly byte[] ipConnection = new byte[4] { 192, 168, 1, 35 };
 
         // Private Variables
         private static int scenarioNo = 0;

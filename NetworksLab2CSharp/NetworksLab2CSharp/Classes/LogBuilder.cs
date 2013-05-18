@@ -14,6 +14,8 @@ namespace NetworksLab2CSharp
 {
     class LogBuilder
     {
+        public List<string> sentMsgs = new List<string>();
+
         public void BuildLog(ReceiverClass rc)
         {
             string logMessage = rc.sb.ToString();
@@ -26,6 +28,28 @@ namespace NetworksLab2CSharp
             logWrite.Close();
             //System.Windows.Forms.MessageBox.Show(logMessage);
         }
+
+        public void BuildSentLog()
+        {
+            string path = @"c:\Logs\Lab2.Scenario2.SentMessages.txt";
+
+            StreamWriter sentWrite = File.AppendText(path);
+
+            //foreach (string b in sentMsgs)
+            //{
+            //    //string value = System.Text.Encoding.ASCII.GetString(b);
+            //    sentWrite.Write(b);
+            //}
+
+            for (int i = 0; i < sentMsgs.Count; i++)
+            {
+                //sentWrite.Write(sentMsgs[i]);
+                //sentWrite.Write("test/r/n");
+            }
+
+                sentWrite.Close();
+        }
+
         #region removeable
         //// Private Global Variables
         //private Classes.ResponseClass responseClass;
