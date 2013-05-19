@@ -22,9 +22,9 @@ namespace NetworksLab2CSharp
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.101.210";
+        //private const string serverIP = "192.168.101.210";
         //private const string serverIP = "10.220.8.161";
-        //private const string serverIP = "192.168.1.35";
+        private const string serverIP = "192.168.64.1";
         private const string serverPort = "2605";
         //private static Object sockLock = new Object();
         //private static Object logLock = new Object();
@@ -218,7 +218,7 @@ namespace NetworksLab2CSharp
 
             //lb.BuildSentLog();
             //lb.LogClose(sock);
-            WriteLog(lb);
+            //WriteLog(lb);
 
             System.Windows.Forms.MessageBox.Show("Finished");
         }
