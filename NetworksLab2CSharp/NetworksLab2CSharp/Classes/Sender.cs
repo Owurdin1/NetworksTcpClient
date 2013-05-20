@@ -237,6 +237,10 @@ namespace NetworksLab2CSharp
                         byte[] formattedMsg = new byte[receivedBytes];
                         Array.Copy(rc.buffer, formattedMsg, receivedBytes);
                         rc.sb.Append(System.Text.Encoding.ASCII.GetString(formattedMsg) + "\r\n");
+                        if (!sock.Connected)
+                        {
+                            break;
+                        }
                     }
                     catch (SocketException se)
                     {
