@@ -42,10 +42,10 @@ namespace NetworksLab2CSharp
 
         private void scenarioListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (scenarioListBox.SelectedIndex != -1)
-            {
-                startButton.Enabled = true;
-            }
+            //if (scenarioListBox.SelectedIndex != -1)
+            //{
+            //    startButton.Enabled = true;
+            //}
         }
 
         //private unsafe void endianButton_Click(object sender, EventArgs e)
