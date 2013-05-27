@@ -17,8 +17,10 @@ namespace NetworksLab2CSharp
         // Constant variables
         private const int PORT = 2605;
         //private readonly byte[] ipConnection = new byte[4] { 192, 168, 101, 210 };
+        //private readonly byte[] ipConnection = new byte[4] { 10, 220, 8, 134 };
         //private readonly byte[] ipConnection = new byte[4] { 10, 220, 8, 161 };
-        private readonly byte[] ipConnection = new byte[4] { 192, 168, 64, 1 };
+        //private readonly byte[] ipConnection = new byte[4] { 24, 21, 179, 96 };
+        private readonly byte[] ipConnection = new byte[4] { 192, 168, 1, 27 };
 
         // Private Variables
         private static int scenarioNo = 0;
@@ -167,6 +169,7 @@ namespace NetworksLab2CSharp
             // IPAddress class set to long int ip to connect to
             byte[] ip = ipConnection;
 
+
             IPAddress ipAddr = new IPAddress(ip);
 
             // Make IPv4 socket with said IPAddress
@@ -176,6 +179,7 @@ namespace NetworksLab2CSharp
             try
             {
                 sock.Connect(ipAddr, PORT);
+                sock.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
 
                 return sock;
             }

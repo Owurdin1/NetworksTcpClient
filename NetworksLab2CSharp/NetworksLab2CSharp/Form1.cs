@@ -20,6 +20,7 @@ namespace NetworksLab2CSharp
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            startLabel.Text = "Running Now";
             ConnectClass cClass = new ConnectClass();
 
             // Set scenario Number for ConnectClass

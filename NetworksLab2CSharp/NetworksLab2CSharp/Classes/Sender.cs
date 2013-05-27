@@ -22,7 +22,10 @@ namespace NetworksLab2CSharp
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.64.1";
+        private const string serverIP = "192.168.1.27";
+        //private const string serverIP = "10.220.8.134";
+        //private const string serverIP = "10.220.8.161";
+        //private const string serverIP = "24.21.179.96";
         private const string serverPort = "2605";
         private Thread[] threads = new Thread[MESSAGE_COUNT];
         private List<byte[]> sentMesgs = new List<byte[]>();
@@ -60,12 +63,13 @@ namespace NetworksLab2CSharp
 
             // Prepare file for IO operations
             //string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
-            string path = @"Lab2.Scenario2.WurdingerO.WORKING_SERVER.txt";
+            string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
             StreamWriter logWrite = File.AppendText(path);
 
             // Get local ip address:
             IPAddress ip = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
             string portNum = ((IPEndPoint)sock.LocalEndPoint).Port.ToString();
+            //sock.Bind((IPEndPoint)sock.LocalEndPoint);
 
             // response time for scenario 2 and 3
             int responseTime = 0;
@@ -202,7 +206,7 @@ namespace NetworksLab2CSharp
 
         private void WriteLog(LogBuilder lb)
         {
-            string path = @"c:\Logs\Lab2.Scenario2.SentMessages.txt";
+            string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
             StreamWriter sentMsg = new StreamWriter(path);
 
             foreach (string s in lb.sentMsgs)
