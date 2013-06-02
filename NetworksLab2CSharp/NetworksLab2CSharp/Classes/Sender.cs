@@ -22,9 +22,10 @@ namespace NetworksLab2CSharp
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.1.27";
+        private const string serverIP = "192.168.1.10";
         //private const string serverIP = "10.220.8.134";
-        //private const string serverIP = "10.220.8.161";
+        //private const string serverIP = "10.220.8.141";
+        //private const string serverIP = "169.254.71.167";
         //private const string serverIP = "24.21.179.96";
         private const string serverPort = "2605";
         private Thread[] threads = new Thread[MESSAGE_COUNT];
@@ -56,7 +57,7 @@ namespace NetworksLab2CSharp
         public void SendData(Socket sock)
         {
             // Set socket timeout
-            //sock.ReceiveTimeout = 4070;
+            sock.ReceiveTimeout = 4000;
 
             // create instance of LogBuilder
             LogBuilder lb = new LogBuilder();
@@ -111,7 +112,7 @@ namespace NetworksLab2CSharp
                 {
                     case 1:
                         sendMsg = reqB.MessageBuildScenarioOne(sock, msTime,
-                            ip.ToString(), portNum, serverPort, serverIP, i);
+                            ip.ToString(), portNum, serverPort, serverIP, i, logWrite);
                         break;
                     case 2:
                         // set up response time delay
@@ -153,7 +154,7 @@ namespace NetworksLab2CSharp
 
                     default:
                         sendMsg = reqB.MessageBuildScenarioOne(sock, msTime,
-                            ip.ToString(), portNum, serverPort, serverIP, i);
+                            ip.ToString(), portNum, serverPort, serverIP, i, logWrite);
                         break;
 
                 }
@@ -161,7 +162,7 @@ namespace NetworksLab2CSharp
                 try
                 {
                     sock.Send(sendMsg);
-                    Thread.Sleep(2);
+                    Thread.Sleep(15);
 
                     #region savePiece
                     //receiveThread.Start();
@@ -206,7 +207,8 @@ namespace NetworksLab2CSharp
 
         private void WriteLog(LogBuilder lb)
         {
-            string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
+            //string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
+            string path = @"c:\Logs\20130530_LabOutput.txt";
             StreamWriter sentMsg = new StreamWriter(path);
 
             foreach (string s in lb.sentMsgs)
@@ -237,6 +239,7 @@ namespace NetworksLab2CSharp
                     try
                     {
                         // receive data from socket
+                        receivedBytes = 0;
                         receivedBytes = sock.Receive(rc.buffer);
                         byte[] formattedMsg = new byte[receivedBytes];
                         Array.Copy(rc.buffer, formattedMsg, receivedBytes);
@@ -246,9 +249,9 @@ namespace NetworksLab2CSharp
                             break;
                         }
                     }
-                    catch (SocketException se)
+                    catch (SocketException) // se)
                     {
-                        System.Windows.Forms.MessageBox.Show(se.Message);
+                        //System.Windows.Forms.MessageBox.Show(se.Message);
                     }
                 }
                 while (receivedBytes > 0);

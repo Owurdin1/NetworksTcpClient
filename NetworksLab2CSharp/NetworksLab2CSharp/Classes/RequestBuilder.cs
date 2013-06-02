@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.IO;
 
 
 namespace NetworksLab2CSharp.Classes
@@ -81,13 +82,15 @@ namespace NetworksLab2CSharp.Classes
         /// a byte array containing formatted message
         /// </returns>
         public byte[] MessageBuildScenarioOne(Socket sock, string msTime, string ip, string portNum,
-            string serverPort, string serverIP, int i)
+            string serverPort, string serverIP, int i, StreamWriter logWrite)
         {
             // Hard code and build string.
             string msgString = "REQ|" + msTime
                 + "|RequestNo:" + i + "|WurdingerO|19-3410|" + "0|" + ip.ToString()
                 + "|" + portNum + "|" + sock.Handle.ToString() + "|" + serverIP + "|"
                 + serverPort + "|StudentData:" + i + "|1|";
+
+            logWrite.Write(msgString + "\r\n");
 
             //System.Windows.Forms.MessageBox.Show(msgString);
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(msgString);

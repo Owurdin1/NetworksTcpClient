@@ -31,7 +31,7 @@ namespace NetworksLab2CSharp
 
         public void BuildSentLog()
         {
-            string path = @"c:\Logs\Lab2.Scenario2.SentMessages.txt";
+            string path = @"c:\Logs\20130530_LabOutput.txt";
 
             StreamWriter sentWrite = File.AppendText(path);
 
