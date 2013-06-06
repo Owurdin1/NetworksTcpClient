@@ -15,14 +15,16 @@ namespace NetworksLab2CSharp
     class SenderClass
     {
         // Constant variables
+        private const int MESSAGE_COUNT = 50;
+        private const int PACE = 2;
+        private const string LOG_PATH = @"c:\Logs\20130530_LabOutput.txt";
         private const string PATH = "C:\\Users\\Postholes\\Documents\\Visual Studio 2012\\Projects\\NetworksTcpClient\\NetworksLab2CSharp\\NetworksLab2CSharp\\IOFiles\\Request.txt";
         private const int BYTE_LENGTH = 2;
-        private const int MESSAGE_COUNT = 100;
         
 
         // Private Variables
         private int scenarioNo;
-        private const string serverIP = "192.168.1.10";
+        private const string serverIP = "192.168.1.16";
         //private const string serverIP = "10.220.8.134";
         //private const string serverIP = "10.220.8.141";
         //private const string serverIP = "169.254.71.167";
@@ -64,8 +66,9 @@ namespace NetworksLab2CSharp
 
             // Prepare file for IO operations
             //string path = @"c:\Logs\Lab2.Scenario2.WurdingerO.txt";
-            string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
-            StreamWriter logWrite = File.AppendText(path);
+            //string path = @"c:\Logs\Lab3.Scenario1.SentMessages.txt";
+            //StreamWriter logWrite = File.AppendText(path);
+            StreamWriter logWrite = File.AppendText(LOG_PATH);
 
             // Get local ip address:
             IPAddress ip = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
@@ -162,7 +165,7 @@ namespace NetworksLab2CSharp
                 try
                 {
                     sock.Send(sendMsg);
-                    Thread.Sleep(15);
+                    Thread.Sleep(PACE);
 
                     #region savePiece
                     //receiveThread.Start();

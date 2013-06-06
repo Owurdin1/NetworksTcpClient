@@ -21,7 +21,7 @@ namespace NetworksLab2CSharp
         //private readonly byte[] ipConnection = new byte[4] { 10, 220, 8, 141 };
         //private readonly byte[] ipConnection = new byte[4] { 24, 21, 179, 96 };
         //private readonly byte[] ipConnection = new byte[4] { 169, 254, 71, 167 };
-        private readonly byte[] ipConnection = new byte[4] { 192, 168, 1, 10 };
+        private readonly byte[] ipConnection = new byte[4] { 192, 168, 1, 16 };
 
         // Private Variables
         private static int scenarioNo = 0;
